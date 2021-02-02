@@ -60,7 +60,7 @@ router.post('/signup', (req, res) => {
                             text: 'and easy to do anywhere, even with Node.js',
                             html: `
                             <h2>Hello this is from food management system, Please click on given link to activate your account</h2>
-                            <p>http://localhost:5000/authentication/activate/${token}</p>
+                            <p>http://localhost:5000/user/authentication/activate/${token}</p>
                             `,
                         }
 
@@ -89,7 +89,7 @@ router.post('/signup', (req, res) => {
     
 })
 
-router.get("/all_user",auth_user, async (req, res) => {
+router.get("/all_user",  async (req, res) => {
     try{
         const user = await User.find();
         res.status(200).json(user)
@@ -100,7 +100,7 @@ router.get("/all_user",auth_user, async (req, res) => {
 })
 
 
-router.get('/activate/:token', email_verify, (req, res) => {
+router.get('/authentication/activate/:token', email_verify, (req, res) => {
 
     User.find({email:req.userData.email})
     .exec()
@@ -118,6 +118,27 @@ router.get('/activate/:token', email_verify, (req, res) => {
     })
 
     
+})
+
+router.post('/update-password/:token',email_verify, async(req, res) => {
+
+    //it will recieve password from react
+    try{  
+    let user = await User.find({email: req.userData.email})
+    console.log(user)
+    bcrypt.hash(req.body.password, 10).then(hash => {
+        console.log(hash)
+        User.findByIdAndUpdate(user[0]._id, {password:hash})
+        .then(() =>  res.json('password updated'))
+        .catch(err => res.json(err))
+
+        
+    })
+    }
+    catch(err){
+        res.status(500).json({"message": err.message})
+    }
+
 })
 
 
@@ -149,6 +170,46 @@ router.post('/logout', auth_user, async (req, res) => {
         res.status(500).json({message:e.message})
     }
 
+
+})
+
+
+router.post('/forgot-pwd', async (req, res) => {
+
+    try{
+        const user = await User.find({email:req.body.email})
+    
+        if(user.length >= 1){
+        const token = jwt.sign({email:user[0].email, _id:user[0]._id.toString()}, "yourmsgsecretkey", {expiresIn: '10min'})
+            
+        //here i will send the react-link for update page while submitting that link it will take help of nodejs update pwd link
+        const msg = {
+                    to: req.body.email, // Change to your recipient
+                    from: process.env.my_email, // Change to your verified sender
+                    subject: 'Forgot password link',
+                    html: `
+                    <h2>Hello this is from food management system, Please click on given link to update your password</h2>
+                    
+                    <p>http://localhost:5000/user/update-password/${token}</p>
+                    `,
+                }
+
+        sgMail.send(msg)
+                .then(() => {
+                        return res.status(200).json("an email has been sented to your account")
+                    })
+                .catch((error) => {
+                    return res.status(500).json(error.message)
+                })
+        }
+        else{
+            res.status(200).json({message: 'an email has been sented to your account'})
+        }
+
+    }
+    catch(err){
+        res.status(500).json({message: 'server error'})
+    }
 
 })
 
