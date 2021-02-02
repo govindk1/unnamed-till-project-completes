@@ -5,6 +5,8 @@ import sgMail from "@sendgrid/mail"
 import dotenv from "dotenv";
 import bcrypt from "bcrypt"
 
+//import middleware for verification
+import auth_user from "../http/middleware/auth_user.js"
 import email_verify from "../http/middleware/email_verify.js"
 
 const router = express.Router()
@@ -87,6 +89,16 @@ router.post('/signup', (req, res) => {
     
 })
 
+router.get("/all_user",auth_user, async (req, res) => {
+    try{
+        const user = await User.find();
+        res.status(200).json(user)
+    }
+    catch(e){
+        res.status(500).json({error: e.message})
+    }
+})
+
 
 router.get('/activate/:token', email_verify, (req, res) => {
 
@@ -107,5 +119,40 @@ router.get('/activate/:token', email_verify, (req, res) => {
 
     
 })
+
+
+
+router.post('/login', async (req, res) => {
+    try{
+    const user = await User.findByCredentials(req.body.email, req.body.password)
+    
+    const token = await user.generateAuthToken()
+    res.status(200).send({user, token})
+    }
+
+    
+    catch(err){
+        res.status(400).json({error:err.message})
+    }
+    
+})
+
+router.post('/logout', auth_user, async (req, res) => {
+    
+    try{
+    req.user.tokens = req.user.tokens.filter((token) => {
+        return token !== req.token})
+        await req.user.save();
+        res.status(200).json({message:"logout success"})
+    }
+    catch(e){
+        res.status(500).json({message:e.message})
+    }
+
+
+})
+
+
+
 
 export default router;

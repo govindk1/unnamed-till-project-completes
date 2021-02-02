@@ -1,5 +1,7 @@
 import mongoose from "mongoose"
 import validator from "validator"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 import fs from "fs";
 
 const Schema = mongoose.Schema;
@@ -30,7 +32,39 @@ const userSchema = new Schema({
         trim: true,
         
     },
+    tokens: [{
+        token:{
+            type:String,
+            required:true,
+        } 
+    }  
+    ]
 })
+
+
+userSchema.statics.findByCredentials = async (email, password) => {
+    const user = await User.findOne({ email })
+
+    if (!user) {
+        throw new Error('Unable to login')
+    }
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    if (!isMatch) {
+        throw new Error('Unable to login')
+    }
+    return user
+}
+
+userSchema.methods.generateAuthToken = async function() {
+    const user = this
+  
+    const token = jwt.sign({ _id:user._id.toString() }, 'yourmsgsecretkey', { expiresIn: "30m" })
+    user.tokens = user.tokens.concat({ token })
+    await user.save()
+
+    return token
+}
 
 userSchema.methods.passwordcheck = (password) => {
     let data = fs.readFileSync('./common-password-list.txt');
@@ -42,6 +76,12 @@ userSchema.methods.passwordcheck = (password) => {
         }
     }
 }
+
+
+
+
+
+
 
 const User = mongoose.model('User', userSchema)
 export default User;
