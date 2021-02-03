@@ -1,9 +1,12 @@
 import express from "express"
-import User from "../models/user.js";
 import jwt from "jsonwebtoken"
 import sgMail from "@sendgrid/mail"
 import dotenv from "dotenv";
 import bcrypt from "bcrypt"
+
+//importing mongoose models
+import User from "../models/user.js";
+import userInfo from "../models/userInfo.js"
 
 //import middleware for verification
 import auth_user from "../http/middleware/auth_user.js"
@@ -109,13 +112,21 @@ router.get('/authentication/activate/:token', email_verify, (req, res) => {
             return res.status(200).json({message:'verified successfully'})
         }
         else{
+            
             const user = new User(req.userData)
 
             user.save()
-            .then((result) =>res.status(200).json({message:'verified successfully'}))
+            .then((result) => {
+                const userinfo = new userInfo({_id:user._id})
+                userinfo.save()
+                .then((result) => res.status(200).json({message:'verified successfully'}))
+                .catch(err =>  res.status(409).json({"message": "err.message"}))
+            })
+            
             .catch(err => res.status(409).json({"message": err.message}))
         }
     })
+    .catch(err => res.status(500).json({"message": err.message}))
 
     
 })
