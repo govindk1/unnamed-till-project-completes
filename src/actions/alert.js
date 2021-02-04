@@ -4,7 +4,7 @@ import { SET_ALERT, REMOVE_ALERT } from './types';
 
 
 export const setAlert = (msg, alertType) => (dispatch) => {
-
+   console.log("govind");
     const id = uuidv4(); //for every alert we are giving an id that will help us to remove alert
     dispatch({
       type: SET_ALERT,

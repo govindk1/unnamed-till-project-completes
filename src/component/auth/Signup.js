@@ -2,8 +2,9 @@ import React, {useState} from 'react'
 import {Link} from "react-router-dom"
 import setAlert from "../../actions/alert.js"
 import {connect} from "react-redux"
+import {register} from "../../actions/auth.js"
 
-function Signup({setAlert}) {
+function Signup({setAlert, register}) {
 
     const [userData, setuserData] = useState({
         username: '',
@@ -17,6 +18,9 @@ function Signup({setAlert}) {
 
         if(userData.password !== userData.cpassword){
             setAlert("password not matches", "danger")
+        }
+        else{
+            register(userData.username, userData.email, userData.password)
         }
     } 
 
@@ -89,7 +93,7 @@ function Signup({setAlert}) {
 
 
 
-export default connect(null, { setAlert })(Signup)
+export default connect(null, { setAlert, register })(Signup)
 
 //it is like this
 //export default connect(mapStateToProps, { setAlert:setAlert, register:register })(Signup)
