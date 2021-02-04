@@ -2,6 +2,7 @@
 
 //components
 import Signup from "./component/auth/Signup.js"
+import Login from "./component/auth/login.js"
 
 //react redux
 import { Provider } from 'react-redux';
@@ -13,7 +14,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <Alert />
-      <Signup />
+      <Login />
     </Provider>
   );
 }

@@ -70,10 +70,10 @@ router.post('/signup', (req, res) => {
                         sgMail
                         .send(msg)
                         .then(() => {
-                            return res.status(200).json("message sent")
+                            return res.status(200).send({message: "email has been to your account"})
                         })
                         .catch((error) => {
-                            return res.status(500).json(error.message)
+                            return res.status(500).json({error: error.message})
                         })
                                         
                     }
@@ -159,30 +159,32 @@ router.post('/login', async (req, res) => {
     const user = await User.findByCredentials(req.body.email, req.body.password)
     
     const token = await user.generateAuthToken()
+    delete user.password;
+    delete user.tokens;
     res.status(200).send({user, token})
     }
 
     
     catch(err){
-        res.status(400).json({error:err.message})
+        res.status(409).send({message:err.message})
     }
     
 })
 
-router.post('/logout', auth_user, async (req, res) => {
+// router.post('/logout', auth_user, async (req, res) => {
     
-    try{
-    req.user.tokens = req.user.tokens.filter((token) => {
-        return token !== req.token})
-        await req.user.save();
-        res.status(200).json({message:"logout success"})
-    }
-    catch(e){
-        res.status(500).json({message:e.message})
-    }
+//     try{
+//     req.user.tokens = req.user.tokens.filter((token) => {
+//         return token !== req.token})
+//         await req.user.save();
+//         res.status(200).json({message:"logout success"})
+//     }
+//     catch(e){
+//         res.status(500).json({message:e.message})
+//     }
 
 
-})
+// })
 
 
 router.post('/forgot-pwd', async (req, res) => {
