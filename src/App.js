@@ -1,10 +1,18 @@
 
 
+//components
+import Signup from "./component/auth/Signup.js"
+
+//react redux
+import { Provider } from 'react-redux';
+import store from './store/store.js';
+
+
 const App = () => {
   return (
-    <div className="App">
-      <h1>Govind there</h1>
-    </div>
+    <Provider store={store}>
+      <Signup />
+    </Provider>
   );
 }
 

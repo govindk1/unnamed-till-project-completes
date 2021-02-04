@@ -1,0 +1,42 @@
+//will use the react redux
+
+there can be more than one reducers so we will combine them and passed to our create store
+
+1)two folders one is action and other is reducers
+2)action for what type of action you want to perform 
+3)reducers based on what action you performed it will update itself
+4)will use connect from react-redux to connect our component with global store and it helps to pull data from the global store or we can use useSelector
+5)connect(1arg)(component which you want to connect with global store) in 1st argument it takes an function in our case mapstatetoprops it have access to all the state with that whatever state we need we will store it in the form of object
+  and pass it to the connected component
+
+connect takes four argument which are optional
+1)mapStateToProps?: Function
+2)mapDispatchToProps?: Function | Object
+3)mergeProps?: Function
+4)options?: Object
+
+
+mapStateToProps?: (state, ownProps?) => Object#
+If a mapStateToProps function is specified, the new wrapper component will subscribe to Redux store 
+updates. This means that any time the store is updated, mapStateToProps will be called.
+ The results of mapStateToProps must be a plain object, which will be merged into the wrapped component’s
+  props. If you don't want to subscribe to store updates, pass null or undefined in place of 
+mapStateToProps.
+
+mapDispatchToProps?: Object | (dispatch, ownProps?) => Object#
+Conventionally called mapDispatchToProps, this second parameter to connect() may either be an object, a function, or not supplied.
+
+Your component will receive dispatch by default, i.e., when you do not supply a second parameter to connect():
+
+
+*****in our case we are taking first two arguments mapStateToProps and mapDispatchToProps
+
+//multiple arrow function
+https://stackoverflow.com/questions/32782922/what-do-multiple-arrow-functions-mean-in-javascript
+
+//uses the thunk middleware for performing asynchrounous task
+//if you see in our bookmarks about redux in mapDispatchToProps section we see that we are limited to dispatch and we have a function that can only return action types so that was the limitation https://blog.logrocket.com/react-redux-connect-when-and-how-to-use-it-f2a1edab2013/
+//thunk gives us ability to return an function instead of returning  "action type"  that's why you will multiple arrow in actions folder files
+and it takes dispatch as an argument
+//advantage of this function is that it dont have to be pure it can contain async request and as per our condition we can dispatch themm
+
