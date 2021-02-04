@@ -16,7 +16,7 @@ function Signup({setAlert}) {
         e.preventDefault()
 
         if(userData.password !== userData.cpassword){
-            setAlert("password not matches", "dna")
+            setAlert("password not matches", "danger")
         }
     } 
 
