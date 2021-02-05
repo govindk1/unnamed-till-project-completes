@@ -11,6 +11,7 @@ import userInfo from "../models/userInfo.js"
 //import middleware for verification
 import auth_user from "../http/middleware/auth_user.js"
 import email_verify from "../http/middleware/email_verify.js"
+import access_user_info from "../http/middleware/access_user_info.js"
 
 const router = express.Router()
 
@@ -92,6 +93,11 @@ router.post('/signup', (req, res) => {
     
 })
 
+router.get("/user_info", access_user_info, (req, res) => {
+    res.send(req.user)
+})
+
+
 router.get("/all_user",  async (req, res) => {
     try{
         const user = await User.find();
@@ -117,7 +123,8 @@ router.get('/authentication/activate/:token', email_verify, (req, res) => {
 
             user.save()
             .then((result) => {
-                const userinfo = new userInfo({_id:user._id})
+                //saving user info also
+                const userinfo = new userInfo({_id:user._id, email:user.email})
                 userinfo.save()
                 .then((result) => res.status(200).json({message:'verified successfully'}))
                 .catch(err =>  res.status(409).json({"message": "err.message"}))
@@ -159,9 +166,7 @@ router.post('/login', async (req, res) => {
     const user = await User.findByCredentials(req.body.email, req.body.password)
     
     const token = await user.generateAuthToken()
-    delete user.password;
-    delete user.tokens;
-    res.status(200).send({user, token})
+    res.status(200).send({token})
     }
 
     

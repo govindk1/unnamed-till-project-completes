@@ -1,4 +1,4 @@
-import {LOGIN_SUCCESS, LOGIN_FAIL} from "./types.js";
+import {LOGIN_SUCCESS, LOGIN_FAIL, LOAD_USER, AUTH_ERROR, REGISTER_FAIL} from "./types.js";
 import axios from "axios"
 import {setAlert} from "../actions/alert.js"
 
@@ -9,21 +9,49 @@ import {setAlert} from "../actions/alert.js"
 //     }
 // }
 
+const loaduser = () => async (dispatch) =>{
+
+    const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + localStorage.token,
+        },
+      };
+    try{
+        const  res = await axios.get('http://127.0.0.1:5000/user/user_info', config)
+        dispatch({
+            type:LOAD_USER,
+            payload: res.data,
+        })
+    }
+    catch(err){
+        dispatch({
+            type: AUTH_ERROR,
+          });
+    }
+}
+
+
 const login = (email, password) => async (dispatch) => {
 
     try{
         const res = await axios.post('http://127.0.0.1:5000/user/login', {email, password});
 
-        dispatch(setAlert('login success', 'success'))
 
         dispatch({
             type:LOGIN_SUCCESS,
             payload:res.data    
         })
 
+        //after login loading user data
+        dispatch(loaduser())
+
     }
     catch(err){
         dispatch(setAlert(err.response.data.message, 'danger'))
+        dispatch({
+            type: LOGIN_FAIL,
+          });
     }
 
 }
@@ -38,7 +66,7 @@ const register = (username, email, password) => async (dispatch) => {
     catch(err){
         dispatch(setAlert(err.response.data.message, 'danger'))
         dispatch({
-            type: LOGIN_FAIL,
+            type: REGISTER_FAIL,
           });
     }
 

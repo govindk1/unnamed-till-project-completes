@@ -1,4 +1,5 @@
-
+import React from "react"
+import {BrowserRouter as Router, Route} from "react-router-dom"
 
 //components
 import Signup from "./component/auth/Signup.js"
@@ -13,8 +14,17 @@ import Alert from "./component/layout/Alert.js";
 const App = () => {
   return (
     <Provider store={store}>
+      <Router>
       <Alert />
-      <Login />
+      <Route path="/login" exact>
+          <Login />
+        </Route>
+
+        <Route path="/signup">
+          <Signup />
+        </Route>
+      
+      </Router>
     </Provider>
   );
 }

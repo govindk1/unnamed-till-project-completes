@@ -3,4 +3,7 @@ export const REMOVE_ALERT = 'REMOVE_ALERT';
 export const LOGIN_SUCCESS = 'REGISTER_SUCCESS';
 export const LOGIN_FAIL = 'REGISTER_FAIL';
 export const LOG_OUT = 'REGISTER_FAIL';
+export const LOAD_USER = 'REGISTER_FAIL';
+export const AUTH_ERROR = 'AUTH_ERROR'
+export const REGISTER_FAIL = 'REGISTER_FAIL'
 
