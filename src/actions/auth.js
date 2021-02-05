@@ -9,6 +9,21 @@ import {setAlert} from "../actions/alert.js"
 //     }
 // }
 
+// //i dont need this register function because it is not affecting the reducer state and even it is not dispatching any state related to this function simply i have to post using axios but anyways it's kinda look sexy
+// const forgetpassword = (email) => async(dispatch) => {
+    
+//     try{
+//         const res = await axios.post('http://127.0.0.1:5000/user/forgot-pwd', {email})
+//         dispatch(alert)
+//     }
+//     catch(err){
+
+//     }
+
+
+// }
+
+
 const loaduser = () => async (dispatch) =>{
     
     const config = {
@@ -56,6 +71,8 @@ const login = (email, password) => async (dispatch) => {
 
 }
 
+//i dont need this register function because it is not affecting the reducer state simply i have to post using axios but anyways it's kinda look sexy
+//once check forgotpassword.js 
 const register = (username, email, password) => async (dispatch) => {
 
    

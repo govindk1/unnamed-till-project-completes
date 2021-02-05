@@ -26,6 +26,8 @@ mapStateToProps.
 mapDispatchToProps?: Object | (dispatch, ownProps?) => Object#
 Conventionally called mapDispatchToProps, this second parameter to connect() may either be an object, a function, or not supplied.
 
+so your component will receive this all in the form of props
+
 Your component will receive dispatch by default, i.e., when you do not supply a second parameter to connect():
 it injects the store’s dispatch method as a prop to the component.
 

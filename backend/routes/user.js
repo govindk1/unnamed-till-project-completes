@@ -147,8 +147,8 @@ router.post('/update-password/:token',email_verify, async(req, res) => {
     bcrypt.hash(req.body.password, 10).then(hash => {
         console.log(hash)
         User.findByIdAndUpdate(user[0]._id, {password:hash})
-        .then(() =>  res.json('password updated'))
-        .catch(err => res.json(err))
+        .then(() =>  res.json({message:'password updated'}))
+        .catch(err => res.json({message: err}))
 
         
     })
@@ -208,16 +208,16 @@ router.post('/forgot-pwd', async (req, res) => {
                     html: `
                     <h2>Hello this is from food management system, Please click on given link to update your password</h2>
                     
-                    <p>http://localhost:5000/user/update-password/${token}</p>
+                    <p>http://localhost:3000/forgot/${token}</p>
                     `,
                 }
 
         sgMail.send(msg)
                 .then(() => {
-                        return res.status(200).json("an email has been sented to your account")
+                        return res.status(200).json({message:"an email has been sented to your account"})
                     })
                 .catch((error) => {
-                    return res.status(500).json(error.message)
+                    return res.status(500).json({message:error.message})
                 })
         }
         else{

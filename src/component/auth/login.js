@@ -17,7 +17,6 @@ function Login({login, isAuthenticated}) {
         login(userData.email, userData.password)
 
     }
-    console.log(isAuthenticated)
     if (isAuthenticated) {
         return <Redirect to='/' />;
     }

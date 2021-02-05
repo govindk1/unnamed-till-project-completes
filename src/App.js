@@ -5,6 +5,8 @@ import {BrowserRouter as Router, Route} from "react-router-dom"
 import Signup from "./component/auth/Signup.js"
 import Login from "./component/auth/login.js"
 import Home from "./component/Home.js"
+import ForgotPassword from "./component/auth/ForgotPassword"
+import UpdatePassword from "./component/auth/UpdatePassword"
 
 //react redux
 import { Provider } from 'react-redux';
@@ -37,7 +39,15 @@ const App = () => {
         <Route path="/signup" exact>
           <Signup />
         </Route>
-      
+
+        <Route path="/forgot" exact>
+          <ForgotPassword />
+        </Route>
+
+        <Route path="/forgot/:tokenid" exact>
+          <UpdatePassword />
+        </Route>
+
       </Router>
     </Provider>
   );

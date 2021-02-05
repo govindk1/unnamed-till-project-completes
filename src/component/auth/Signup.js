@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {Link, Redirect, useHistory} from "react-router-dom"
-import setAlert from "../../actions/alert.js"
+import {setAlert} from "../../actions/alert.js"
 import {connect} from "react-redux"
 import {register} from "../../actions/auth.js"
 import PropTypes from 'prop-types';
