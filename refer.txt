@@ -27,7 +27,7 @@ mapDispatchToProps?: Object | (dispatch, ownProps?) => Object#
 Conventionally called mapDispatchToProps, this second parameter to connect() may either be an object, a function, or not supplied.
 
 Your component will receive dispatch by default, i.e., when you do not supply a second parameter to connect():
-
+it injects the store’s dispatch method as a prop to the component.
 
 *****in our case we are taking first two arguments mapStateToProps and mapDispatchToProps
 
@@ -40,3 +40,11 @@ https://stackoverflow.com/questions/32782922/what-do-multiple-arrow-functions-me
 and it takes dispatch as an argument
 //advantage of this function is that it dont have to be pure it can contain async request and as per our condition we can dispatch themm
 
+//so combining all these
+we are binding our action function with dispatch using connect(connect(null, {adding dispatch here})(component name)) 
+we are also binding with mapStateToProps to our component means whenever stores update mapStateToProps will get called
+and then we call our actions function inside of our component,
+action function will receive the dispatch and to perfom async operation and to return the function object we are using redux thunk
+
+
+https://stackoverflow.com/questions/43051291/attach-authorization-header-for-all-axios-requests

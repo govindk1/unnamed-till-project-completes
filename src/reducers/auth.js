@@ -2,7 +2,7 @@ import {LOGIN_SUCCESS, LOGIN_FAIL, LOG_OUT, LOAD_USER, AUTH_ERROR, REGISTER_FAIL
 
 const initialState = {
     token: localStorage.getItem('token'),
-    isAuthenticated: false,
+    isAuthenticated: null,
     loading: true,
     user: null,
 }
@@ -21,8 +21,8 @@ const auth = (state = initialState, action) => {
         
         case LOGIN_FAIL:
         case LOG_OUT:
-        case AUTH_ERROR:
         case REGISTER_FAIL:
+        case AUTH_ERROR:
             localStorage.removeItem('token');
             return { ...state, token: null, isAuthenticated: false, loading: false };
         default:

@@ -10,7 +10,7 @@ import {setAlert} from "../actions/alert.js"
 // }
 
 const loaduser = () => async (dispatch) =>{
-
+    
     const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -73,4 +73,4 @@ const register = (username, email, password) => async (dispatch) => {
 
 }
 
-export {register, login}
+export {register, login, loaduser}

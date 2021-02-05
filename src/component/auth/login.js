@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
 import {connect} from "react-redux"
 import {login} from "../../actions/auth.js"
+import {Link, Redirect} from "react-router-dom"
 
 
-function Login({login}) {
+function Login({login, isAuthenticated}) {
 
     const [userData, setuserData] = useState({
         email: '',
@@ -15,6 +16,10 @@ function Login({login}) {
 
         login(userData.email, userData.password)
 
+    }
+    console.log(isAuthenticated)
+    if (isAuthenticated) {
+        return <Redirect to='/' />;
     }
 
     return (
@@ -50,14 +55,18 @@ function Login({login}) {
 
                 <button type='submit'>Login</button>
                 <div className='login'>
-                Don't have an account ? {/**<Link to=''>Signup</signup>**/}
+                Don't have an account ? <Link to='/signup'>Signup</Link>
                 </div>
             </form>
         </React.Fragment>
     )
 }
 
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated,
+  });
+
 //used for this to add dispatch to our login action
-export default connect(null, { login })(Login)
+export default connect(mapStateToProps, { login })(Login)
 
 

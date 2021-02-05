@@ -1,10 +1,13 @@
 import React, {useState} from 'react'
-import {Link} from "react-router-dom"
+import {Link, Redirect, useHistory} from "react-router-dom"
 import setAlert from "../../actions/alert.js"
 import {connect} from "react-redux"
 import {register} from "../../actions/auth.js"
+import PropTypes from 'prop-types';
 
-function Signup({setAlert, register}) {
+function Signup({setAlert, register, isAuthenticated}) {
+
+    let history = useHistory();
 
     const [userData, setuserData] = useState({
         username: '',
@@ -12,6 +15,12 @@ function Signup({setAlert, register}) {
         password:'',
         cpassword: '',
     })
+
+    if (isAuthenticated) {
+        return <Redirect to='/' />;
+    }
+
+    
 
     const submitForm = (e) => {
         e.preventDefault()
@@ -84,16 +93,28 @@ function Signup({setAlert, register}) {
                 </div>
                 <button type='submit'>Register</button>
                 <div className='login'>
-                Already have an account ? {/**<Link to=''>Login</Link>**/}
+                Already have an account ? <Link to='/login'>Login</Link>
                 </div>
             </form>
         </React.Fragment>
     )
 }
 
+Signup.propTypes = {
+    setAlert: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool,
+  };
 
 
-export default connect(null, { setAlert, register })(Signup)
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated,
+  });
+
+
+
+
+export default connect(mapStateToProps, { setAlert, register })(Signup)
 
 //it is like this
 //export default connect(mapStateToProps, { setAlert:setAlert, register:register })(Signup)
