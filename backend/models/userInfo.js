@@ -25,6 +25,10 @@ const userInfoSchema  = new Schema({
         type:String,
         default:''
     },
+    address:{
+        type:String,
+        default:''
+    }
 })
 
 const userInfo = mongoose.model('userInfo', userInfoSchema);

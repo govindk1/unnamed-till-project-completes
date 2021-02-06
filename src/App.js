@@ -7,6 +7,10 @@ import Login from "./component/auth/login.js"
 import Home from "./component/Home.js"
 import ForgotPassword from "./component/auth/ForgotPassword"
 import UpdatePassword from "./component/auth/UpdatePassword"
+import Navbar from "./component/layout/Navbar"
+import Myprofile from "./component/profile/Myprofile"
+import PrivateRoute from "./component/routing/PrivateRoute"
+import EditMyprofile from "./component/profile-forms/EditMyprofile.js"
 
 //react redux
 import { Provider } from 'react-redux';
@@ -27,12 +31,18 @@ const App = () => {
     <Provider store={store}>
       <Router>
       <Alert />
+      <Navbar />
 
       <Route path="/" exact>
           <Home />
       </Route>
 
-      <Route path="/login" exact>
+      <PrivateRoute exact path="/myprofile" component={Myprofile} />
+
+      <PrivateRoute exact path="/edit-profile" component={EditMyprofile} />
+      
+
+      <Route path="/login" exact >
           <Login />
         </Route>
 

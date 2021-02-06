@@ -95,8 +95,22 @@ router.post('/signup', (req, res) => {
 
 router.get("/user_info", access_user_info, (req, res) => {
     res.send(req.user)
+
 })
 
+
+router.post("/user_info", access_user_info, (req, res) => {
+    const user = req.user;
+    req.user.name = req.body.name
+    req.user.about = req.body.about
+    req.user.state = req.body.state
+    req.user.city = req.body.city
+    req.user.address = req.body.address
+
+    user.save()
+    .then(() => res.status(200).send({message:"updated successfully"}))
+    .catch((err) => res.status(200).send({message:err.message}))
+})
 
 router.get("/all_user",  async (req, res) => {
     try{
@@ -126,7 +140,7 @@ router.get('/authentication/activate/:token', email_verify, (req, res) => {
                 //saving user info also
                 const userinfo = new userInfo({_id:user._id, email:user.email})
                 userinfo.save()
-                .then((result) => res.status(200).json({message:'verified successfully'}))
+                .then((result) => res.status(200).json({message:'updated successfully'}))
                 .catch(err =>  res.status(409).json({"message": "err.message"}))
             })
             

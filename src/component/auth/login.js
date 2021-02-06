@@ -4,7 +4,7 @@ import {login} from "../../actions/auth.js"
 import {Link, Redirect} from "react-router-dom"
 
 
-function Login({login, isAuthenticated}) {
+function Login({login, isAuthenticated, loading}) {
 
     const [userData, setuserData] = useState({
         email: '',
@@ -21,7 +21,8 @@ function Login({login, isAuthenticated}) {
         return <Redirect to='/' />;
     }
 
-    return (
+    //since when login is done user will loaded which makes loading = false so if its false there is no need to give this component
+    return !loading ? (
         <React.Fragment>
             <div>
                 <h2>Login to your account</h2>
@@ -53,16 +54,20 @@ function Login({login, isAuthenticated}) {
                 </div>
 
                 <button type='submit'>Login</button>
+                <div>
+                <Link to="/forgot">Forgot Password</Link>
+                </div>
                 <div className='login'>
                 Don't have an account ? <Link to='/signup'>Signup</Link>
                 </div>
             </form>
         </React.Fragment>
-    )
+    ):<p></p>
 }
 
 const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
+    loading: state.auth.loading
   });
 
 //used for this to add dispatch to our login action

@@ -1,4 +1,4 @@
-import {LOGIN_SUCCESS, LOGIN_FAIL, LOAD_USER, AUTH_ERROR, REGISTER_FAIL} from "./types.js";
+import {LOGIN_SUCCESS, LOGIN_FAIL, LOAD_USER, AUTH_ERROR, REGISTER_FAIL, LOG_OUT} from "./types.js";
 import axios from "axios"
 import {setAlert} from "../actions/alert.js"
 
@@ -25,7 +25,7 @@ import {setAlert} from "../actions/alert.js"
 
 
 const loaduser = () => async (dispatch) =>{
-    
+   
     const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -34,6 +34,7 @@ const loaduser = () => async (dispatch) =>{
       };
     try{
         const  res = await axios.get('http://127.0.0.1:5000/user/user_info', config)
+        
         dispatch({
             type:LOAD_USER,
             payload: res.data,
@@ -89,5 +90,10 @@ const register = (username, email, password) => async (dispatch) => {
 
 
 }
+
+export const logout = () => (dispatch) => {
+    dispatch({ type: LOG_OUT });
+  };
+  
 
 export {register, login, loaduser}

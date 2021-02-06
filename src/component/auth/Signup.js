@@ -5,7 +5,7 @@ import {connect} from "react-redux"
 import {register} from "../../actions/auth.js"
 import PropTypes from 'prop-types';
 
-function Signup({setAlert, register, isAuthenticated}) {
+function Signup({setAlert, register, isAuthenticated, loading}) {
 
     let history = useHistory();
 
@@ -33,7 +33,7 @@ function Signup({setAlert, register, isAuthenticated}) {
         }
     } 
 
-    return (
+    return !loading ? (
         <React.Fragment>
             <div>
                 <h2>Create a new account</h2>
@@ -97,7 +97,7 @@ function Signup({setAlert, register, isAuthenticated}) {
                 </div>
             </form>
         </React.Fragment>
-    )
+    ):<p></p>
 }
 
 Signup.propTypes = {
@@ -109,6 +109,7 @@ Signup.propTypes = {
 
 const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
+    loading: state.auth.loading
   });
 
 
