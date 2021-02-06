@@ -4,8 +4,7 @@ import {setAlert} from "../../actions/alert.js"
 import {useHistory} from 'react-router-dom'
 
 //components
-import LeftEditprofile from "./LeftEditProfile"
-import RightEditProfile from "./RightEditprofile"
+import EditProfile from "./Editprofile"
 import Spinner from "../layout/Spinner"
 
 const EditMyprofile = ({loading}) => {
@@ -16,8 +15,7 @@ const history = useHistory()
     return loading ? (<Spinner />) : (
         <React.Fragment>
             <div>
-                <LeftEditprofile />
-                <RightEditProfile />
+                <EditProfile />
             </div>
         </React.Fragment>
     )

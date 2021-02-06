@@ -28,6 +28,10 @@ const userInfoSchema  = new Schema({
     address:{
         type:String,
         default:''
+    },
+    selectedFile:{
+        type:String,
+        default:'user.jpg'
     }
 })
 

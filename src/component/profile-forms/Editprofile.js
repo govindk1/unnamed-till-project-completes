@@ -17,22 +17,36 @@ function Editprofile({auth:{user}, loaduser, setAlert}) {
         state:"Andhra Pradesh (AP)",
         city:"vimsa",
         address:user.address,
-        number: 0
+        number: 0,
+        filestring: null
     }) 
 
+    //uploading image will take formdata 
     const submitForm = async (e) => {
         e.preventDefault()
-        
+        setuserData({...userData, filestring:userData.filestring})
+  
+
+        const formData = new FormData();
+        if(userData.filestring)
+            formData.append('myfile', userData.filestring)
+        formData.append('name', userData.name)
+        formData.append('about', userData.about)
+        formData.append('city', userData.city)
+        formData.append('address', userData.address)
+        formData.append('state', userData.state)
+        console.log([...formData])
+
         const config = {
             headers: {
-              'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data',
               'Authorization': "Bearer " + localStorage.token,
             },
           };
           
         try{
         
-            const res = await axios.post('http://127.0.0.1:5000/user/user_info', {...userData}, config)
+            const res = await axios.post('http://127.0.0.1:5000/user/user_info', formData, config)
             setAlert("Updated Successfully", "success")
             loaduser()
             
@@ -57,7 +71,7 @@ function Editprofile({auth:{user}, loaduser, setAlert}) {
             </div>
 
             <div>   
-                <form onSubmit={submitForm}>
+                <form  onSubmit={submitForm}>
                     <div>
                         <div>
                             <label>Name</label>
@@ -123,13 +137,24 @@ function Editprofile({auth:{user}, loaduser, setAlert}) {
                                 return(
                                 <option key={i} value={city} >{city}</option>)
                             })}
-                        </select>
-                        
+                        </select>    
                     
                     </div>
-
                     
+                    <div>
+                        <div>
+                            <label for="myfile">
+                                Upload your image
+                            </label>
+                        </div>
 
+                        <input 
+                        type="file"  
+                        name="myfile" 
+
+                        onChange={(e) => setuserData({...userData, filestring:e.target.files[0]})}
+                        />
+                    </div>
                     
 
                     <button  type="submit">Submit</button>

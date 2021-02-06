@@ -4,6 +4,9 @@ import sgMail from "@sendgrid/mail"
 import dotenv from "dotenv";
 import bcrypt from "bcrypt"
 
+//for file upload
+import multer from 'multer';
+
 //importing mongoose models
 import User from "../models/user.js";
 import userInfo from "../models/userInfo.js"
@@ -21,6 +24,39 @@ dotenv.config();
 
 //for email verification using mailgun
 sgMail.setApiKey(process.env.apiKey)
+
+
+//file upload configuration
+
+//more detailed way of storing file 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, 'uploads/')
+    },
+    filename : function(req, file, cb){
+        cb(null, file.fieldname + '-' + Date.now()+"." + file.mimetype.split("/")[1])  //error
+    }
+});
+
+//filtering the file
+const fileFilter = (req, file, cb) => {
+    //accept a file
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+        cb(null, true); // save it
+    }
+    else{
+        cb(new Error('filetype is not allowed'), false); //reject it
+    }
+}
+
+const upload = multer({
+    storage:storage, 
+    limits:{
+    fileSize: 1024*1025*5
+    },
+    fileFilter:fileFilter,
+
+})
 
 
 router.post('/signup', (req, res) => {
@@ -99,13 +135,19 @@ router.get("/user_info", access_user_info, (req, res) => {
 })
 
 
-router.post("/user_info", access_user_info, (req, res) => {
+router.post("/user_info",access_user_info, upload.single('myfile'), (req, res) => {
     const user = req.user;
+    
     req.user.name = req.body.name
     req.user.about = req.body.about
     req.user.state = req.body.state
     req.user.city = req.body.city
     req.user.address = req.body.address
+
+    if(req.file)
+        req.user.selectedFile = req.file.path
+
+    // console.log("govind", req.body)
 
     user.save()
     .then(() => res.status(200).send({message:"updated successfully"}))

@@ -15,7 +15,7 @@ const history = useHistory()
 
     return loading ? (<Spinner />) : (
         <React.Fragment>
-            <div style={{display:"flex"}}>
+            <div style={{display:"flex", justifyContent:"space-between", textAlign:"center"}}>
                 <LeftSideBar />
                 <RightSideBar />
             </div>

@@ -21,7 +21,7 @@ const auth_user = async (req, res, next) => {
 
     }
     catch (e) {
-        res.status(401).send({error: e.message})
+        res.status(401).send({message: e.message})
     }
 
 }
