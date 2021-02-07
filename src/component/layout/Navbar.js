@@ -6,6 +6,8 @@ import { logout } from '../../actions/auth';
 const Navbar = ({ logout, auth: { isAuthenticated, loading } }) => {
   const authLinks = (
     <span>
+    <Link to='/addorder'>addorder</Link>
+    <Link to='/myorder'>myorder</Link>
     <Link to='/myprofile'>Myprofile</Link>
       <a onClick={logout} href='#!'>
         Logout

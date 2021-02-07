@@ -21,7 +21,7 @@ const orderSchema = new Schema({
         type:String,
         required: true,
     },
-    FoodDescription:{
+    foodDescription:{
         type:String,
         default:''
     }

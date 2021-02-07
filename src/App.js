@@ -11,7 +11,9 @@ import Navbar from "./component/layout/Navbar"
 import Myprofile from "./component/profile/Myprofile"
 import PrivateRoute from "./component/routing/PrivateRoute"
 import EditMyprofile from "./component/profile-forms/EditMyprofile.js"
-import Order from "./component/order/Order.js"
+import AddOrder from "./component/order/AddOrder.js"
+import MyOrder from "./component/order/MyOrder.js"
+import EditMyOrder from "./component/order/EditMyOrder.js"
 
 //react redux
 import { Provider } from 'react-redux';
@@ -42,7 +44,11 @@ const App = () => {
 
       <PrivateRoute exact path="/edit-profile" component={EditMyprofile} />
       
-      <PrivateRoute exact path="/addorder" component={Order} />
+      <PrivateRoute exact path="/addorder" component={AddOrder} />
+
+      <PrivateRoute exact path="/myorder" component={MyOrder} />
+
+      <PrivateRoute exact path="/editmyorder/:id" component={EditMyOrder} />
 
       <Route path="/login" exact >
           <Login />

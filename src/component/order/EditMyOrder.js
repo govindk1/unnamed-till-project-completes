@@ -2,32 +2,50 @@ import React, {useEffect, useState} from "react"
 import {connect} from "react-redux"
 import {useHistory} from "react-router-dom"
 
-import {addpost} from "../../actions/post"
-
+import {getposts, editpost} from "../../actions/post"
+import {useParams} from "react-router-dom"
 
 //components
 import Spinner from "../layout/Spinner"
 
-const Order = ({loading,addpost}) => {
+const EditMyOrder = ({post:{posts, loading}, editpost, getposts}) => {
 
-    const history = useHistory()
-
+    const {id} = useParams();
+    const history=useHistory();
     const [postInfo, setpostInfo] = useState({
         phone:'',
         no:'',
         foodItems:'',
         foodType:'VEG'
     })
+   
+    useEffect(() => {
+        getposts()
+      
+        for(let i = 0; i < posts.length; i++){
+            if(posts[i]._id === id){
+            
+                setpostInfo({
+                    phone:posts[i].phone,
+                    no:posts[i].number,
+                    foodItems:posts[i].foodDescription,
+                    foodType:'VEG'
+                })
+                break;
+            }
+        }
+    }, [loading])
 
-    //uploading image will take formdata 
     const submitForm = async (e) => {
         e.preventDefault()
 
-        addpost({...postInfo})
+        editpost({id, ...postInfo})
+        
         history.push('/myorder')
+        
     }
 
-    return loading ? (<Spinner />) : (
+    return loading ? <Spinner/> :(
         <React.Fragment>
         <div style={{textAlign:'center'}}>
         <br />
@@ -42,9 +60,9 @@ const Order = ({loading,addpost}) => {
             <form  onSubmit={submitForm}>
                 
                 <div>
-                    {/*<div>
+                    <div>
                         <label>Phone Number</label>
-                    </div>*/}
+                    </div>
 
                     <input 
                         type="tel" 
@@ -58,9 +76,9 @@ const Order = ({loading,addpost}) => {
                 
 
                 <div>
-                    {/*<div>
+                    <div>
                         <label>No of People it can feed</label>
-                    </div>*/}
+                    </div>
 
                     <input
                         placeholder="No of People it can feed" 
@@ -72,9 +90,9 @@ const Order = ({loading,addpost}) => {
                 </div>
 
                 <div>
-                    {/*<div>
+                    <div>
                         <label>Food items</label>
-                    </div>*/}
+                    </div>
 
                     <textarea 
                         placeholder="Food items"
@@ -85,9 +103,9 @@ const Order = ({loading,addpost}) => {
                 </div>
 
                 <div>
-                    {/*<div>
+                    <div>
                         <label>Food items</label>
-                    </div>*/}
+                    </div>
 
                     <select value={postInfo.foodType}  
                         onChange = {(e) => setpostInfo({...postInfo, foodType:e.target.value})}>
@@ -110,8 +128,8 @@ const Order = ({loading,addpost}) => {
 }
 
 const mapStateToProps = (state) => ({
-    loading : state.auth.loading
+    post:state.post
 })
 
 
-export default connect(mapStateToProps, {addpost})(Order)
+export default connect(mapStateToProps, {editpost, getposts})(EditMyOrder)
