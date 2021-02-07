@@ -4,7 +4,7 @@ import  userInfo from "../../models/userInfo.js"
 const auth_user = async (req, res, next) => {
 
     try{
-       
+       console.log(req.header('Authorization'))
         const token = (req.header('Authorization').split(" "))[1];
         console.log(token)
         const decoded = jwt.verify(token, 'yourmsgsecretkey');

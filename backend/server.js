@@ -8,7 +8,8 @@ import  "./db/mongoose.js"
 import userRouter from "./routes/user.js";
 
 
-
+//using order router 
+import orderRouter from "./routes/order.js"
 
 const app = express()
 const PORT = 5000;
@@ -18,7 +19,7 @@ app.use(cors())
 
 
 app.use('/user', userRouter)
-
+app.use('/userOrder', orderRouter)
  
 
 

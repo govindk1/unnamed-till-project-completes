@@ -11,6 +11,7 @@ import Navbar from "./component/layout/Navbar"
 import Myprofile from "./component/profile/Myprofile"
 import PrivateRoute from "./component/routing/PrivateRoute"
 import EditMyprofile from "./component/profile-forms/EditMyprofile.js"
+import Order from "./component/order/Order.js"
 
 //react redux
 import { Provider } from 'react-redux';
@@ -41,6 +42,7 @@ const App = () => {
 
       <PrivateRoute exact path="/edit-profile" component={EditMyprofile} />
       
+      <PrivateRoute exact path="/addorder" component={Order} />
 
       <Route path="/login" exact >
           <Login />
