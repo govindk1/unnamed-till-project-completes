@@ -1,18 +1,44 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-const PrivateRoute = ({component: Component,auth: { isAuthenticated, loading }, ...rest}) => {
+const PrivateRoute = ({component: Component,auth: { isAuthenticated, loading, role}, ...rest}) => {
+    
+    
+   
 
     return(
     <Route
     {...rest}
     render={(props) =>
-      !isAuthenticated && !loading ? (
-        <Redirect to='/login' />
-      ) : (
-        <Component {...props} />
-      )
+  
+      {
+        if(!isAuthenticated && !loading){
+          <Redirect to = "/login" />
+        }
+
+        else if(role === "ogn" &&  rest.type === "user"){
+          console.log("great")
+          return <Redirect to = "/" />
+        }
+
+        else if(role === "user" && rest.type === "ogn"){
+          return <Redirect to = "/" />
+        }
+
+        else{
+          return <Component {...props} />
+        }
+
+        
+      }
+
+      // !isAuthenticated && !loading && role === "ogn" ? (
+      //   <Redirect to='/login' />
+      // ) : (
+      //   <Component {...props} />
+      // )
+    
     }
   />)
 };

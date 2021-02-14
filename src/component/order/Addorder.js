@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import {connect} from "react-redux"
-import {useHistory} from "react-router-dom"
+
 
 import {addpost} from "../../actions/post"
 
@@ -9,8 +9,6 @@ import {addpost} from "../../actions/post"
 import Spinner from "../layout/Spinner"
 
 const Order = ({loading,addpost}) => {
-
-    const history = useHistory()
 
     const [postInfo, setpostInfo] = useState({
         phone:'',
@@ -24,7 +22,7 @@ const Order = ({loading,addpost}) => {
         e.preventDefault()
 
         addpost({...postInfo})
-        history.push('/myorder')
+        
     }
 
     return loading ? (<Spinner />) : (

@@ -74,11 +74,11 @@ const login = (email, password) => async (dispatch) => {
 
 //i dont need this register function because it is not affecting the reducer state simply i have to post using axios but anyways it's kinda look sexy
 //once check forgotpassword.js 
-const register = (username, email, password) => async (dispatch) => {
+const register = (username, email, password, role) => async (dispatch) => {
 
    
     try{
-        const res = await axios.post('http://127.0.0.1:5000/user/signup', { email, password, username});
+        const res = await axios.post('http://127.0.0.1:5000/user/signup', { email, password, username, role});
         dispatch(setAlert(res.data.message, 'success'))
     }
     catch(err){

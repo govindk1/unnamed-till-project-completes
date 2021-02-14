@@ -24,6 +24,10 @@ const orderSchema = new Schema({
     foodDescription:{
         type:String,
         default:''
+    },
+    city:{
+        type:String,
+        default:''
     }
 
 }, {timestamps:true})

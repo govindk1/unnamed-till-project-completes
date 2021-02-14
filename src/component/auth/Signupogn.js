@@ -5,7 +5,7 @@ import {connect} from "react-redux"
 import {register} from "../../actions/auth.js"
 import PropTypes from 'prop-types';
 
-function Signup({setAlert, register, isAuthenticated, loading}) {
+function Signupogn({setAlert, register, isAuthenticated, loading}) {
 
     let history = useHistory();
 
@@ -14,6 +14,7 @@ function Signup({setAlert, register, isAuthenticated, loading}) {
         email:'',
         password:'',
         cpassword: '',
+        filestring: null
     })
 
     if (isAuthenticated) {
@@ -22,14 +23,14 @@ function Signup({setAlert, register, isAuthenticated, loading}) {
 
     
 
-    const submitForm = (e) => {
+    const submitForm = async (e) => {
         e.preventDefault()
 
         if(userData.password !== userData.cpassword){
             setAlert("password not matches", "danger")
         }
         else{
-            register(userData.username, userData.email, userData.password, "user")
+            register(userData.username, userData.email, userData.password, "ogn")
         }
     } 
 
@@ -86,6 +87,7 @@ function Signup({setAlert, register, isAuthenticated, loading}) {
                 </div>
 
 
+
                 <div className='terms'>
                 ✔ By clicking Sign Up, you agree to our Terms, Data Policy and
                 Cookie Policy. You may receive SMS notifications from us and can
@@ -100,7 +102,7 @@ function Signup({setAlert, register, isAuthenticated, loading}) {
     ):<p></p>
 }
 
-Signup.propTypes = {
+Signupogn.propTypes = {
     setAlert: PropTypes.func.isRequired,
     register: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool,
@@ -110,18 +112,10 @@ Signup.propTypes = {
 const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
     loading: state.auth.loading
-  });
+  })
 
 
 
+export default connect(mapStateToProps, { setAlert, register })(Signupogn)
 
-export default connect(mapStateToProps, { setAlert, register })(Signup)
 
-//it is like this
-//export default connect(mapStateToProps, { setAlert:setAlert, register:register })(Signup)
-
-//you can also do like this
-// const mapDispatchToProps = {
-//     setAlert: setAlert, //it provides  dispatch functionality to the setAlert
-// }
-// export default connect(mapStateToProps,mapDispatchToProps)(Signup)

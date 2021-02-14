@@ -41,7 +41,10 @@ const EditMyOrder = ({post:{posts, loading}, editpost, getposts}) => {
 
         editpost({id, ...postInfo})
         
-        history.push('/myorder')
+      
+        history.push('/')
+      
+        
         
     }
 

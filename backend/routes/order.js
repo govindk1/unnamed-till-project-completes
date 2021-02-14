@@ -17,7 +17,8 @@ router.post('/order',access_user_info, async (req, res) => {
         phone:req.body.phone,
         number:parseInt(req.body.no),
         typeFood:req.body.foodType,
-        foodDescription:req.body.foodItems
+        foodDescription:req.body.foodItems,
+        city: req.user.city
     })
     console.log(order)
     try{
@@ -39,8 +40,10 @@ router.get('/order', access_user_info, async (req, res) => {
         res.status(500).json({message: err.message})
     }
     
-
 })
+
+
+
 
 router.delete('/order/:id', access_user_info, async (req, res) => {    
     Order.findByIdAndDelete(req.params.id)
@@ -64,6 +67,25 @@ router.post('/update/:id', access_user_info, (req, res) => {
     })
     .catch(err => res.status(400).json({message:err.message}))
 
+
+})
+
+
+//excessing order of same city
+router.get('/getorders', access_user_info, async (req, res) => {
+    
+    try{
+    console.log(req.user.city)
+    const order = await Order.find({city:req.user.city})
+    console.log(order)
+    res.status(200).send(order);
+    }
+
+
+    catch{
+        res.status(500).json({message:'Server side error'})
+    }
+        
 
 })
 

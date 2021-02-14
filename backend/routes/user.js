@@ -90,7 +90,7 @@ router.post('/signup', (req, res) => {
                     else{
                         
                         //we are sending the jwt token with hashed password
-                        const token = jwt.sign({email:req.body.email,password:hash, username:req.body.username}, "yourmsgsecretkey", {expiresIn: '10min'})
+                        const token = jwt.sign({email:req.body.email,password:hash, username:req.body.username, role:req.body.role}, "yourmsgsecretkey", {expiresIn: '10min'})
             
 
                         const msg = {
@@ -180,7 +180,7 @@ router.get('/authentication/activate/:token', email_verify, (req, res) => {
             user.save()
             .then((result) => {
                 //saving user info also
-                const userinfo = new userInfo({_id:user._id, email:user.email})
+                const userinfo = new userInfo({_id:user._id, email:user.email, role:req.userData.role})
                 userinfo.save()
                 .then((result) => res.status(200).json({message:'updated successfully'}))
                 .catch(err =>  res.status(409).json({"message": "err.message"}))

@@ -4,6 +4,7 @@ const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     loading: true,
+    role:"user",
     user: null,
 }
 
@@ -13,7 +14,7 @@ const auth = (state = initialState, action) => {
     switch(type){
 
         case LOAD_USER:
-            return {...initialState, isAuthenticated: true, loading: false, user: payload}
+            return {...initialState, isAuthenticated: true, loading: false, user: payload, role: payload.role}
 
         case LOGIN_SUCCESS: 
             localStorage.setItem('token', payload.token);
@@ -24,7 +25,7 @@ const auth = (state = initialState, action) => {
         case REGISTER_FAIL:
         case AUTH_ERROR:
             localStorage.removeItem('token');
-            return { ...state, token: null, isAuthenticated: false, loading: false };
+            return { ...state, token: null, isAuthenticated: false, loading: false, role:"user" };
         default:
             return state;
     }

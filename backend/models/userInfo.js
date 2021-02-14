@@ -32,6 +32,11 @@ const userInfoSchema  = new Schema({
     selectedFile:{
         type:String,
         default:'user.jpg'
+    },
+    role: {
+        type: String,
+        default: 'user',
+        enum: ["user", "ogn", "admin"]
     }
 })
 

@@ -1,28 +1,17 @@
-import React, {useEffect, useState} from "react"
+import React, {useState, useEffect} from 'react'
 import {connect} from "react-redux"
-import {Link} from "react-router-dom"
-import "./myorder.css"
-
-import {getposts, deletepost} from "../../actions/post"
-
-
+import {getOrder} from "../../actions/giveOrder.js"
+import Spinner from "../layout/Spinner"
 import moment from "moment-timezone"
 
-//components
-import Spinner from "../layout/Spinner"
+function Giveorder({data:{loading, posts}, getOrder}) {
 
-const MyOrder = ({post:{loading, posts}, getposts, deletepost}) => {
-    
     useEffect(() => {
-        getposts()
-    }, [getposts, loading])
-
+        getOrder()
+    }, [getOrder, loading])
 
     return loading ? (<Spinner />) : (
         <React.Fragment>
-        <button>
-        <Link to="/addorder">Addorder</Link>
-        </button>
         <br />
         <br />
         <br />
@@ -48,9 +37,6 @@ const MyOrder = ({post:{loading, posts}, getposts, deletepost}) => {
                         <th>{post.typeFood}</th>
                         <th>{post.foodDescription}</th>
                         <th>{moment(post.createdAt).tz("Asia/Kolkata").format('MM/DD/YYYY hh:mm:ss')}</th>
-                        <th>
-                        <Link to={"/editmyorder/"+post._id}>edit</Link> |<a href="#" onClick={() => deletepost(post._id)}>delete</a>
-                        </th>
                     </tr>
                 )
             })}
@@ -59,15 +45,13 @@ const MyOrder = ({post:{loading, posts}, getposts, deletepost}) => {
         </table>
             
         </div>
-     
+        
         </React.Fragment>
     )
-
 }
 
-const mapStateToProps = (state) => ({
-    post : state.post
+const mapStatetoProps = (state) => ({
+    data:state.giveorder
 })
 
-
-export default connect(mapStateToProps, {getposts, deletepost})(MyOrder)
+export default connect(mapStatetoProps, {getOrder})(Giveorder)

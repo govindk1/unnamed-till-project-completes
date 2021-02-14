@@ -101,9 +101,10 @@ const deletepost = (id) => async (dispatch) => {
         type:EDIT_POST,
         payload: res.data,
       })
+      dispatch(setAlert("edited successfully", "success"))
     }
     catch(err){
-      console.log("G")
+      dispatch(setAlert("Some error occurs", "success"))
     }
 
   }
