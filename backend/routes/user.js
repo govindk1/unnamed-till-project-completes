@@ -41,6 +41,7 @@ const storage = multer.diskStorage({
 //filtering the file
 const fileFilter = (req, file, cb) => {
     //accept a file
+    console.log(file)
     if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
         cb(null, true); // save it
     }
@@ -59,9 +60,43 @@ const upload = multer({
 })
 
 
+
+
+//storing pdf file
+const storage1 = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, 'documents/')
+    },
+    filename : function(req, file, cb){
+        cb(null, file.fieldname + '-' + Date.now()+"." + file.mimetype.split("/")[1])  //error
+    }
+});
+
+//filtering the file
+const fileFilter1 = (req, file, cb) => {
+    //accept a file
+    console.log(file)
+    if(file.mimetype === 'application/pdf'){
+        cb(null, true); // save it
+    }
+    else{
+        cb(new Error('filetype is not allowed'), false); //reject it
+    }
+}
+
+const upload1 = multer({
+    storage:storage1, 
+    limits:{
+    fileSize: 1024*1025*5
+    },
+    fileFilter:fileFilter1,
+
+})
+
+
 router.post('/signup', (req, res) => {
     const user = new User(req.body)
-    
+    console.log()
     //checking for weak passwords
     try{
     user.passwordcheck(user.password); 
@@ -93,6 +128,76 @@ router.post('/signup', (req, res) => {
                         const token = jwt.sign({email:req.body.email,password:hash, username:req.body.username, role:req.body.role}, "yourmsgsecretkey", {expiresIn: '10min'})
             
 
+                        const msg = {
+                            to: req.body.email, // Change to your recipient
+                            from: process.env.my_email, // Change to your verified sender
+                            subject: 'Sending with SendGrid is Fun',
+                            text: 'and easy to do anywhere, even with Node.js',
+                            html: `
+                            <h2>Hello this is from food management system, Please click on given link to activate your account</h2>
+                            <p>http://localhost:5000/user/authentication/activate/${token}</p>
+                            `,
+                        }
+
+                        sgMail
+                        .send(msg)
+                        .then(() => {
+                            return res.status(200).send({message: "email has been to your account"})
+                        })
+                        .catch((error) => {
+                            return res.status(500).json({error: error.message})
+                        })
+                                        
+                    }
+            })
+                
+        
+        }
+    })
+
+    // user.save()
+    // .then((result) =>res.status(200).json({message:'saved successfully'}))
+    // .catch(err => console.log(err.message))
+    
+
+
+    
+})
+
+router.post('/signupogn', upload1.single("myfile"),  (req, res) => {
+    const user = new User(req.body)
+    
+    //checking for weak passwords
+    try{
+    user.passwordcheck(user.password); 
+    }
+
+    catch(error){
+        res.status('400').json({message:'password is too easy'})
+    }
+
+
+    User.find({email:req.body.email})
+    .exec() //it will return an promise
+    .then(user => {
+        if(user.length >= 1){
+            return res.status(409).json({message:"user already exists"})
+        }
+        else{
+            bcrypt.hash(req.body.password, 10, (err, hash) => {
+                if(err){
+                    console.log("govind")
+                    return res.status(500).json({
+                        message: err.message
+                        });
+                    }
+                    
+                    else{
+                        
+                        //we are sending the jwt token with hashed password
+                        const token = jwt.sign({email:req.body.email,password:hash, username:req.body.username, role:req.body.role, filename:req.file.filename}, "yourmsgsecretkey", {expiresIn: '10min'})
+            
+                        
                         const msg = {
                             to: req.body.email, // Change to your recipient
                             from: process.env.my_email, // Change to your verified sender
@@ -166,7 +271,7 @@ router.get("/all_user",  async (req, res) => {
 
 
 router.get('/authentication/activate/:token', email_verify, (req, res) => {
-
+    console.log(req.userData)
     User.find({email:req.userData.email})
     .exec()
     .then(user => {
@@ -180,7 +285,14 @@ router.get('/authentication/activate/:token', email_verify, (req, res) => {
             user.save()
             .then((result) => {
                 //saving user info also
-                const userinfo = new userInfo({_id:user._id, email:user.email, role:req.userData.role})
+                let userinfo;
+                if(req.userData.filename){
+                    userinfo = new userInfo({_id:user._id, email:user.email, role:req.userData.role, document:req.userData.filename})
+                }
+                else{
+                    userinfo =  new userInfo({_id:user._id, email:user.email, role:req.userData.role})
+                }
+
                 userinfo.save()
                 .then((result) => res.status(200).json({message:'updated successfully'}))
                 .catch(err =>  res.status(409).json({"message": "err.message"}))

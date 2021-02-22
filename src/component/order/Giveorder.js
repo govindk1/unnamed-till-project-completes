@@ -26,6 +26,7 @@ function Giveorder({data:{loading, posts}, getOrder}) {
                 <th>type of food</th>
                 <th>Food Description</th>
                 <th>Created at</th>
+                <th>Status</th>
             </tr>
 
             {posts.map(post => {
@@ -37,6 +38,7 @@ function Giveorder({data:{loading, posts}, getOrder}) {
                         <th>{post.typeFood}</th>
                         <th>{post.foodDescription}</th>
                         <th>{moment(post.createdAt).tz("Asia/Kolkata").format('MM/DD/YYYY hh:mm:ss')}</th>
+                        <th>{post.status}</th>
                     </tr>
                 )
             })}

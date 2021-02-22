@@ -28,6 +28,10 @@ const orderSchema = new Schema({
     city:{
         type:String,
         default:''
+    },
+    status:{
+        type:String,
+        default:'order_placed'
     }
 
 }, {timestamps:true})

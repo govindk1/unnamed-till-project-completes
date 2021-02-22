@@ -4,6 +4,7 @@ import {setAlert} from "../../actions/alert.js"
 import {connect} from "react-redux"
 import {register} from "../../actions/auth.js"
 import PropTypes from 'prop-types';
+import axios from "axios"
 
 function Signupogn({setAlert, register, isAuthenticated, loading}) {
 
@@ -26,11 +27,44 @@ function Signupogn({setAlert, register, isAuthenticated, loading}) {
     const submitForm = async (e) => {
         e.preventDefault()
 
-        if(userData.password !== userData.cpassword){
+        
+        if(!userData.filestring){
+            setAlert("Please Upload The Neccesary Documents", "danger")
+        }
+
+        else if(userData.password !== userData.cpassword){
             setAlert("password not matches", "danger")
         }
+        
+        
+
+        
         else{
-            register(userData.username, userData.email, userData.password, "ogn")
+            const formData = new FormData();
+            formData.append('myfile', userData.filestring)
+            formData.append('username', userData.username)
+            formData.append('email', userData.email)
+            formData.append('password', userData.password)
+
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+
+            try{
+        
+                const res = await axios.post('http://127.0.0.1:5000/user/signupogn', formData, config)
+                setAlert("A mail has been sent to your email please verify it", "success")
+                
+                
+               
+                }
+                catch(err){
+                        console.log('gv')
+                        setAlert(err.response.data.message, 'danger')
+                }
+
         }
     } 
 
@@ -48,7 +82,6 @@ function Signupogn({setAlert, register, isAuthenticated, loading}) {
                     value={userData.username}
                     onChange={(e) => setuserData({...userData, username:e.target.value})}
                     name='username'
-                    autoComplete="off"
                     required
                 />
                 </div>
@@ -58,7 +91,6 @@ function Signupogn({setAlert, register, isAuthenticated, loading}) {
                     type='email'
                     placeholder='Email Address'
                     name='email'
-                    autoComplete="off"
                     value={userData.email}
                     onChange={(e) => setuserData({...userData, email:e.target.value})}
                     required
@@ -68,7 +100,6 @@ function Signupogn({setAlert, register, isAuthenticated, loading}) {
                 <div>
                 <input
                     type='password'
-                    autoComplete="off"
                     placeholder='Password'
                     name='password'
                     value={userData.password}
@@ -77,14 +108,28 @@ function Signupogn({setAlert, register, isAuthenticated, loading}) {
                 </div>
 
                 <div>
-                <input
-                    type='password'
-                    autoComplete="off"
-                    placeholder='Confirm Password'
-                    value={userData.cpassword}
-                    onChange={(e) => setuserData({...userData, cpassword:e.target.value})}
-                />
+                    <input
+                        type='password'
+                        placeholder='Confirm Password'
+                        value={userData.cpassword}
+                        onChange={(e) => setuserData({...userData, cpassword:e.target.value})}
+                    />
                 </div>
+
+                <div>
+                        <div>
+                            <label for="myfile">
+                                Upload your documents
+                            </label>
+                        </div>
+
+                        <input 
+                        type="file"  
+                        name="myfile" 
+
+                        onChange={(e) => setuserData({...userData, filestring:e.target.files[0]})}
+                        />
+                    </div>
 
 
 
@@ -95,7 +140,7 @@ function Signupogn({setAlert, register, isAuthenticated, loading}) {
                 </div>
                 <button type='submit'>Register</button>
                 <div className='login'>
-                Already have an account ? <Link to='/login'>Login</Link>
+                    Already have an account ? <Link to='/login'>Login</Link>
                 </div>
             </form>
         </React.Fragment>

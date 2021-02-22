@@ -24,7 +24,7 @@ function Editprofile({auth:{user}, loaduser, setAlert}) {
     //uploading image will take formdata 
     const submitForm = async (e) => {
         e.preventDefault()
-        setuserData({...userData, filestring:userData.filestring})
+        
   
 
         const formData = new FormData();

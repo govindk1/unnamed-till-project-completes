@@ -37,7 +37,11 @@ const userInfoSchema  = new Schema({
         type: String,
         default: 'user',
         enum: ["user", "ogn", "admin"]
+    },
+    document:{
+        type:String,
     }
+
 })
 
 const userInfo = mongoose.model('userInfo', userInfoSchema);
