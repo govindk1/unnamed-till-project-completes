@@ -287,7 +287,7 @@ router.get('/authentication/activate/:token', email_verify, (req, res) => {
                 //saving user info also
                 let userinfo;
                 if(req.userData.filename){
-                    userinfo = new userInfo({_id:user._id, email:user.email, role:req.userData.role, document:req.userData.filename})
+                    userinfo = new userInfo({_id:user._id, email:user.email, role:"ogn", document:req.userData.filename})
                 }
                 else{
                     userinfo =  new userInfo({_id:user._id, email:user.email, role:req.userData.role})

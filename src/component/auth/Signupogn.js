@@ -55,13 +55,12 @@ function Signupogn({setAlert, register, isAuthenticated, loading}) {
             try{
         
                 const res = await axios.post('http://127.0.0.1:5000/user/signupogn', formData, config)
-                setAlert("A mail has been sent to your email please verify it", "success")
+                setAlert("An mail has been sent to your email please verify it", "success")
                 
-                
+                history.push('/login')
                
                 }
                 catch(err){
-                        console.log('gv')
                         setAlert(err.response.data.message, 'danger')
                 }
 

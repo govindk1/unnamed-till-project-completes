@@ -3,8 +3,16 @@ import {connect} from "react-redux"
 import {getOrder} from "../../actions/giveOrder.js"
 import Spinner from "../layout/Spinner"
 import moment from "moment-timezone"
+import socketClient  from "socket.io-client";
+const SERVER = "http://127.0.0.1:5000";
 
 function Giveorder({data:{loading, posts}, getOrder}) {
+
+    var socket = socketClient(SERVER);
+    socket.on('order_update', (message) => {
+         getOrder()
+    });
+
 
     useEffect(() => {
         getOrder()

@@ -8,6 +8,9 @@ const router = express.Router()
 
 router.post('/order',access_user_info, async (req, res) => {
 
+    //whenever user will post order we will emit an event that event will be listened by eventemitter in server side after than eventemitter will emit an event that will listended by our react app
+    const eventEmitter = req.app.get('eventEmitter')
+
     if(req.user.name === '' || req.user.city === '' || req.user.state === '' || req.user.address === ''){
         res.status(500).json({message:"please update your profile"})
     }
@@ -23,6 +26,7 @@ router.post('/order',access_user_info, async (req, res) => {
     console.log(order)
     try{
        await order.save()
+       eventEmitter.emit('order_update', "item has been placed Successfully")
        res.status(200).json({...req.body, _id:order._id}) 
     }catch(err){
     res.status(500).json({message:err.message})
@@ -45,14 +49,24 @@ router.get('/order', access_user_info, async (req, res) => {
 
 
 
-router.delete('/order/:id', access_user_info, async (req, res) => {    
+router.delete('/order/:id', access_user_info, async (req, res) => { 
+    
+ 
+    const eventEmitter = req.app.get('eventEmitter')
+
     Order.findByIdAndDelete(req.params.id)
-      .then(() => res.json({message:'Post deleted.'}))
+      .then(() => {
+            eventEmitter.emit('order_update', "item has been deleted")
+            res.json({message:'Post deleted.'})
+        })
       .catch(err => res.status(400).json({message:err.message}))
 })
 
 router.post('/update/:id', access_user_info, (req, res) => {
     console.log(req.body)
+
+    const eventEmitter = req.app.get('eventEmitter')
+
     Order.findById(req.params.id)
         .then(order => {
             order.phone = req.body.phone;
@@ -62,7 +76,10 @@ router.post('/update/:id', access_user_info, (req, res) => {
         
 
         order.save()
-        .then(() => res.json(order))
+        .then(() => {
+            eventEmitter.emit('order_update', "item has been Successfully Edited")
+            res.json(order)
+        })
         .catch(err => res.status(400).json({message:err.message}))
     })
     .catch(err => res.status(400).json({message:err.message}))
