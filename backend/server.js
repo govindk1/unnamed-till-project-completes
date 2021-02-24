@@ -59,6 +59,10 @@ eventEmitter.on("order_update", (message) => {
     io.emit("order_update", null)
 })
 
+eventEmitter.on("status_update", (data) => {
+    io.emit("status_update", data)
+})
+
 
 
 

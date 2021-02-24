@@ -3,6 +3,7 @@ import {connect} from "react-redux"
 import {getOrder} from "../../actions/giveOrder.js"
 import Spinner from "../layout/Spinner"
 import moment from "moment-timezone"
+import axios from "axios"
 import socketClient  from "socket.io-client";
 const SERVER = "http://127.0.0.1:5000";
 
@@ -12,6 +13,29 @@ function Giveorder({data:{loading, posts}, getOrder}) {
     socket.on('order_update', (message) => {
          getOrder()
     });
+
+
+    const selectChange = async (e, order_id) => {
+        console.log(order_id)
+        console.log(e.target.value);
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+              'Authorization': "Bearer " + localStorage.token,
+            },
+          };
+          
+        try{
+        
+            const res = await axios.post(`http://127.0.0.1:5000/userOrder/update_status/${order_id}`, {status:e.target.value, time:moment(new Date()).tz("Asia/Kolkata").format('MM/DD/YYYY hh:mm:ss')}, config)
+            
+            }
+            catch(err){
+                    console.log("error")
+            }
+
+    }
 
 
     useEffect(() => {
@@ -46,7 +70,27 @@ function Giveorder({data:{loading, posts}, getOrder}) {
                         <th>{post.typeFood}</th>
                         <th>{post.foodDescription}</th>
                         <th>{moment(post.createdAt).tz("Asia/Kolkata").format('MM/DD/YYYY hh:mm:ss')}</th>
-                        <th>{post.status}</th>
+                        <th>
+                            {post.status === "order_placed"
+                            ?(
+                                <select onChange={(e) => selectChange(e, post._id)}>
+                                    <option key="1" value="">Select Option:  </option>
+                                    <option key="2" value="take_order">Take Order</option>
+                                </select>
+                            ):(
+                                post.status === "take_order" ? (
+                                    <select onChange={(e) => selectChange(e, post._id)}>
+                                        <option key="1" value="">Select Option:  </option>
+                                        <option key="3" value="order_delivered">Order Delivered</option>
+                                    </select>
+                                )
+                                :(
+                                    <p>Order completed</p>
+                                )    
+                            )
+                            }
+                            
+                        </th>
                     </tr>
                 )
             })}

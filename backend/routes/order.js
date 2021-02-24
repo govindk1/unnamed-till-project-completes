@@ -27,6 +27,7 @@ router.post('/order',access_user_info, async (req, res) => {
     try{
        await order.save()
        eventEmitter.emit('order_update', "item has been placed Successfully")
+
        res.status(200).json({...req.body, _id:order._id}) 
     }catch(err){
     res.status(500).json({message:err.message})
@@ -78,6 +79,28 @@ router.post('/update/:id', access_user_info, (req, res) => {
         order.save()
         .then(() => {
             eventEmitter.emit('order_update', "item has been Successfully Edited")
+            res.json(order)
+        })
+        .catch(err => res.status(400).json({message:err.message}))
+    })
+    .catch(err => res.status(400).json({message:err.message}))
+
+
+})
+
+router.post('/update_status/:id', access_user_info, (req, res) => {
+    console.log(req.body)
+
+    const eventEmitter = req.app.get('eventEmitter')
+
+    Order.findById(req.params.id)
+        .then(order => {
+            order.status = req.body.status;        
+
+        order.save()
+        .then(() => {
+            eventEmitter.emit('order_update', "item has been Successfully Edited")
+            eventEmitter.emit('status_update', {id:req.params.id, status:req.body.status, time:req.body.time})
             res.json(order)
         })
         .catch(err => res.status(400).json({message:err.message}))
