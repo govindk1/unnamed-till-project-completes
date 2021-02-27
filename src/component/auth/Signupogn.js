@@ -11,7 +11,7 @@ function Signupogn({setAlert, register, isAuthenticated, loading}) {
     let history = useHistory();
 
     const [userData, setuserData] = useState({
-        username: '',
+        name: '',
         email:'',
         password:'',
         cpassword: '',
@@ -42,7 +42,7 @@ function Signupogn({setAlert, register, isAuthenticated, loading}) {
         else{
             const formData = new FormData();
             formData.append('myfile', userData.filestring)
-            formData.append('username', userData.username)
+            formData.append('name', userData.name)
             formData.append('email', userData.email)
             formData.append('password', userData.password)
 
@@ -77,10 +77,10 @@ function Signupogn({setAlert, register, isAuthenticated, loading}) {
                 <div>
                 <input
                     type='text'
-                    placeholder='username'
-                    value={userData.username}
-                    onChange={(e) => setuserData({...userData, username:e.target.value})}
-                    name='username'
+                    placeholder='name'
+                    value={userData.name}
+                    onChange={(e) => setuserData({...userData, name:e.target.value})}
+                    name='name'
                     required
                 />
                 </div>

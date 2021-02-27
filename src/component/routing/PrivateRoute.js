@@ -2,11 +2,11 @@ import React, {useState, useEffect} from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-const PrivateRoute = ({component: Component,auth: { isAuthenticated, loading, role}, ...rest}) => {
+const PrivateRoute = ({component: Component,auth: { isAuthenticated, loading, role, verify}, ...rest}) => {
     
     
    
-
+  console.log(verify)
     return(
     <Route
     {...rest}
@@ -17,12 +17,15 @@ const PrivateRoute = ({component: Component,auth: { isAuthenticated, loading, ro
           <Redirect to = "/login" />
         }
 
-        else if(role === "ogn" &&  rest.type === "user"){
-          console.log("great")
+        else if((role === "ogn" || role === "admin") &&  rest.type === "user"){
           return <Redirect to = "/" />
         }
 
-        else if(role === "user" && rest.type === "ogn"){
+        else if((role === "user" || role === "admin" || verify === 0) && rest.type === "ogn"){
+          return <Redirect to = "/" />
+        }
+
+        else if((role === "user" || role === "ogn") && rest.type === "admin"){
           return <Redirect to = "/" />
         }
 

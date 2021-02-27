@@ -4,6 +4,7 @@ const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     loading: true,
+    verify:0,
     role:"user",
     user: null,
 }
@@ -14,7 +15,7 @@ const auth = (state = initialState, action) => {
     switch(type){
 
         case LOAD_USER:
-            return {...initialState, isAuthenticated: true, loading: false, user: payload, role: payload.role}
+            return {...initialState, isAuthenticated: true, loading: false, user: payload, role: payload.role, verify:payload.verify}
 
         case LOGIN_SUCCESS: 
             localStorage.setItem('token', payload.token);

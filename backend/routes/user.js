@@ -195,7 +195,7 @@ router.post('/signupogn', upload1.single("myfile"),  (req, res) => {
                     else{
                         
                         //we are sending the jwt token with hashed password
-                        const token = jwt.sign({email:req.body.email,password:hash, username:req.body.username, role:req.body.role, filename:req.file.filename}, "yourmsgsecretkey", {expiresIn: '10min'})
+                        const token = jwt.sign({email:req.body.email,password:hash, username:req.body.name, role:req.body.role, filename:req.file.filename}, "yourmsgsecretkey", {expiresIn: '10min'})
             
                         
                         const msg = {
@@ -287,7 +287,7 @@ router.get('/authentication/activate/:token', email_verify, (req, res) => {
                 //saving user info also
                 let userinfo;
                 if(req.userData.filename){
-                    userinfo = new userInfo({_id:user._id, email:user.email, role:"ogn", document:req.userData.filename})
+                    userinfo = new userInfo({_id:user._id, name:req.userData.username, email:user.email, role:"ogn", document:req.userData.filename})
                 }
                 else{
                     userinfo =  new userInfo({_id:user._id, email:user.email, role:req.userData.role})

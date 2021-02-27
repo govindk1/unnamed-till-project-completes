@@ -17,6 +17,9 @@ import MyOrder from "./component/order/MyOrder.js"
 import EditMyOrder from "./component/order/EditMyOrder.js"
 import Signupogn from "./component/auth/Signupogn.js"
 import Giveorder from "./component/order/Giveorder.js"
+import Adminlogin from "./component/admin/Adminlogin.js"
+import Reviewpdf from "./component/admin/Reviewpdf.js"
+import Viewpdf from "./component/admin/Viewpdf.js"
 
 //react redux
 import { Provider } from 'react-redux';
@@ -58,25 +61,33 @@ const App = () => {
 
       <PrivateRoute exact path="/giveorder" component={Giveorder} type="ogn" />
 
+      <PrivateRoute exact path="/reviewpdf" component={Reviewpdf} type="admin" />
+
+      <PrivateRoute exact path="/viewpdf/:id" component={Viewpdf} type="admin" />
+
       <Route path="/login" exact >
           <Login />
-        </Route>
+      </Route>
 
-        <Route path="/signup" exact>
-          <Signup />
-        </Route>
+      <Route path="/adminlogin" exact>
+        <Adminlogin />
+      </Route>
 
-        <Route path="/signupogn" exact>
-          <Signupogn />
-        </Route>
+      <Route path="/signup" exact>
+        <Signup />
+      </Route>
 
-        <Route path="/forgot" exact>
-          <ForgotPassword />
-        </Route>
+      <Route path="/signupogn" exact>
+        <Signupogn />
+      </Route>
 
-        <Route path="/forgot/:tokenid" exact>
-          <UpdatePassword />
-        </Route>
+      <Route path="/forgot" exact>
+        <ForgotPassword />
+      </Route>
+
+      <Route path="/forgot/:tokenid" exact>
+        <UpdatePassword />
+      </Route>
 
       </Router>
     </Provider>

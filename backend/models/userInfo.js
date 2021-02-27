@@ -38,6 +38,10 @@ const userInfoSchema  = new Schema({
         default: 'user',
         enum: ["user", "ogn", "admin"]
     },
+    verify:{
+        type:Number,
+        default: 0
+    },
     document:{
         type:String,
     }

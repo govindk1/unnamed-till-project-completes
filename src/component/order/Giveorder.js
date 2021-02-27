@@ -7,8 +7,9 @@ import axios from "axios"
 import socketClient  from "socket.io-client";
 const SERVER = "http://127.0.0.1:5000";
 
-function Giveorder({data:{loading, posts}, getOrder}) {
+function Giveorder({data:{loading, posts}, getOrder, verify}) {
 
+    console.log(verify)
     var socket = socketClient(SERVER);
     socket.on('order_update', (message) => {
          getOrder()
@@ -105,7 +106,8 @@ function Giveorder({data:{loading, posts}, getOrder}) {
 }
 
 const mapStatetoProps = (state) => ({
-    data:state.giveorder
+    data:state.giveorder,
+    verify:state.auth.verify
 })
 
 export default connect(mapStatetoProps, {getOrder})(Giveorder)

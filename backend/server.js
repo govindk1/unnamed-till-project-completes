@@ -13,11 +13,15 @@ import userRouter from "./routes/user.js";
 import orderRouter from "./routes/order.js"
 
 
+//using admin route
+import adminRouter from "./routes/admin.js"
+
 const PORT = 5000;
 
 //configuring app
 const app = express()
 app.use(express.static('uploads'))
+app.use(express.static('documents'))
 app.use(express.json())
 app.use(cors())
 
@@ -25,7 +29,7 @@ app.use(cors())
 //setting up route
 app.use('/user', userRouter)
 app.use('/userOrder', orderRouter)
-
+app.use('/admin', adminRouter)
 
 //socket.io work
 const httpServer = createServer(app);

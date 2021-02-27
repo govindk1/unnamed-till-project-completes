@@ -72,6 +72,28 @@ const login = (email, password) => async (dispatch) => {
 
 }
 
+
+const adminlogin = (email, password) => async (dispatch) => {
+    console.log("hi")
+    try{
+        const res = await axios.post('http://127.0.0.1:5000/admin/login', {email, password});
+
+        dispatch({
+            type:LOGIN_SUCCESS,
+            payload: res.data
+        })
+        dispatch(loaduser())
+    }
+
+    catch(err){
+        dispatch(setAlert(err.response.data.message, 'danger'))
+        dispatch({
+            type:LOGIN_FAIL
+        })
+    }
+
+}
+
 //i dont need this register function because it is not affecting the reducer state simply i have to post using axios but anyways it's kinda look sexy
 //once check forgotpassword.js 
 const register = (username, email, password, role) => async (dispatch) => {
@@ -96,4 +118,4 @@ export const logout = () => (dispatch) => {
   };
   
 
-export {register, login, loaduser}
+export {register, login, loaduser, adminlogin}

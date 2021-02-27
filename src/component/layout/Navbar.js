@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/auth';
 
-const Navbar = ({ logout, auth: { isAuthenticated, loading, role } }) => {
-
+const Navbar = ({ logout, auth: { isAuthenticated, loading, role, verify } }) => {
+  console.log(loading)
   let authLinks; 
   if(role === "user"){
     authLinks = (
@@ -19,10 +19,32 @@ const Navbar = ({ logout, auth: { isAuthenticated, loading, role } }) => {
       </span>)
   }
 
-  if(role === "ogn"){
+  if(role === "admin"){
+    authLinks = (
+      <span>
+        <Link to ="/reviewpdf">Review</Link>
+        <Link to='/myprofile'>Myprofile</Link>
+          <a onClick={logout} href='#!'>
+            Logout
+          </a>
+      </span>
+    )
+  }
+
+  if(role === "ogn" && verify){
     authLinks = (
       <span>
       <Link to="/giveorder">Give Order</Link>
+      <Link to='/myprofile'>Myprofile</Link>
+        <a onClick={logout} href='#!'>
+          Logout
+        </a>
+      </span>)
+  }
+
+  if(role === "ogn" && verify === 0){
+    authLinks = (
+      <span>
       <Link to='/myprofile'>Myprofile</Link>
         <a onClick={logout} href='#!'>
           Logout
